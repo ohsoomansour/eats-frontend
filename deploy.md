@@ -65,4 +65,10 @@
      
      🔹CI(Continuous Integration): 지속적인 통합, App의 버그 수정 또는 새로운 코드 변경이
                                    주기적으로 빌드 및 테스트 되면서 공유되는 레퍼지토리에 통합 되는 것           
-    > git add . > git commit -m "CI commit" > d git push origin main                               
+    > git add . > git commit -m "CI commit" > git push origin 
+  4. Tailwind 파일이 커서 압축 파일로 build 
+    > 📃tailwindcss.com/docs/optimizing-for-production
+    > purge 는 우리가 사용하고 있는 className만 Netlify 최종 CSS build에 추가 된다
+    > Now whenever you compile your CSS with `NODE_ENV` set to `production`, Tailwind will automatically purge unused styles from your CSS    
+    📄최신update: https://tailwindcss.com/docs/upgrade-guide
+    total 323.7MB                         
