@@ -81,4 +81,9 @@
     > [_redirects] ⭐어떤 페이지로 가든 전부 /index.html로 간다
       /* /index.html 200(코드)
     > index.html은 react application을 포함하고 있는 페이지 
-    > react application에서 path를 결정                            
+    > react application에서 path를 결정
+
+    6. 🚨계정 만들기 > Request URL: http://localhost:4000/graphql  
+      🚫localhost에 연결 하고 싶은게 아님
+      🚧"heroku eats-backend에 있는 API에 연결 하고 싶다"🚧
+      🔵URL을 변경 해줘야 한다: [apollo.ts] 
