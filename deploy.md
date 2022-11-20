@@ -11,7 +11,7 @@
   git branch -M main
     - main branch는 '배포 가능한 상태'만 관리 
     - 생성되어 있는 브랜치를 확인
-  git remote add origin https://github.com/ohsoomansour/eats-fronted.git(리포리토리주소) 
+  git remote add origin https://github.com/ohsoomansour/eats-frontend.git(리포리토리주소) 
    - origin은 git이 가져온 '원격 저장소'를 가리킴
      > 🚀 원격 저장소를 연결 🪐🌍
   git remote -v
