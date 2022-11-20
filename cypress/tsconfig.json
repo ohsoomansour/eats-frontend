@@ -1,0 +1,63 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "../node_modules",
+    "types":[
+      "cypress",
+      "@testing-library/cypress",
+    ],
+    "outDir": "#",
+  },
+  "include": [
+      "./**/*.*"
+  ]
+
+}
+/*#️⃣21.0 Installing Cypress
+  1. npm install cypress > npx cypress open (컴퓨터에 software를 여는거다 )
+    > e2e 왼쪽 선택 > cypress/e2e > 이름.cy.ts 준수 
+
+  2. 용어정리
+   📃The tsconfig.json file specifies the root files and
+      the compiler options required to compile the project.
+
+   🔹"compilerOptions": 명령어 번역 옵션
+                      Instructs the TypeScript compiler how to compile .ts files.
+
+   🔹 "allowJs":true  js파일이 있다 > js도 번역한다 
+
+   🔹"baseUrl":"../node_modules" > cypress가 설치된 곳이 node_modules 폴더  
+                                 > 📃https://www.typescriptlang.org/tsconfig#baseUrl
+   🔹"types":[
+      "cypress"  > 어떤 파일을 더 하고싶다 
+                 > Specify type package names to be included without being referenced in a source file.
+                 > 📄https://www.typescriptlang.org/tsconfig#types
+                   - 리스화된 패키들만 글로벌 스코프에 포함 된다 
+                   - cypress 패키지를 글로벌로 추가 할수 있다 
+                    > ⚡baseUrl로 국한 된 곳에서 cypress를 찾아서 + Global로 추가된다  
+
+    🚨'c:/Users/오수만/Desktop/nuber-eats-frontend/cypress/e2e/1-getting-started/✅todo.cy.js'
+       파일은 입력 파일(typescript)을 덮어쓰므로 쓸 수 없습니다.
+    🔵기본적으로 typescript가 cypress로 구성된 code를 build 할 수 없기 때문 
+      > 먄약 cypress 코드를 build할 수 있다면, 이게 index나 index.js같은 걸로 교체 될 수 있기 때문
+      > 하지만❗ e2e 테스트 용도이지 컴파일(ts->js)하여 브라우저에 랜더링 할 필요가 없음!
+
+    ]
+
+    "outDir": "#" > 🔹출력할 디렉토리  ❗cypress 코드를 build?
+                    🔹tsc(TypeScriptCompiler)
+      📄https://www.typescriptlang.org/tsconfig#outDir
+
+    "include": [
+      "./별별/별.별"  > 🔹 **:모든 폴더 / *:모든 파일 .*:모든 extension
+    ]                 > 📄https://www.typescriptlang.org/tsconfig#include
+                       - 컴파일 될 폴더 범위                   
+   
+  🔷+설명: typescript는 javscript의 슈퍼셋이라서 브라우저에서는 typescript를 인식x
+     브라우저에서 사용하게 하려면 ts를 js로 바꿔주는 작업을 해주어얗는데 컴파일된 파일들을
+     생성하는 위치가 'outDir'에서 설정해준 위치 
+
+  🔷TS2.0 부터 가능해진 내장 type definition 시스템으로 인해서 @types/ 로 설치한 패키지는
+     types나 typeRoots를 설정해주지 않아도 기본적으로 자동으로 모두 읽어와서 활용한다
+    즉, node_modules/@types 내의 모든 경로를 찾아와서 사용    
+*/
