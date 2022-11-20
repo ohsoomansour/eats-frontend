@@ -52,4 +52,17 @@
  #️⃣26.3 Netlify 
   1. github id / pw
   2. https://app.netlify.com/start/repos
-    > Github repository: eats-frontend
+    > Connect to Git provider
+    > Pick a repository Github repository: eats-frontend
+     - "script":{
+         "prebuild":"npm run tailwind:build",
+        }
+  3. Production: main@HEAD(main branch의 최신 commit) Failed>> [Deploy log] >> (아래의 에러 메세지)
+    > 🚨Failed to compile.
+    > ❗'loading' is assigned a value but never used 등 
+    > 🔵해결책: [package.json] > "build": "CI=false react-scripts build"
+          "Netlify 가 front-end를 build할 때 경고를 에러로 인식하지 않는다는 의미"
+     
+     🔹CI(Continuous Integration): 지속적인 통합, App의 버그 수정 또는 새로운 코드 변경이
+                                   주기적으로 빌드 및 테스트 되면서 공유되는 레퍼지토리에 통합 되는 것           
+    > git add . > git commit -m "CI commit" > d git push origin main                               
