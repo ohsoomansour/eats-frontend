@@ -71,4 +71,14 @@
     > purge 는 우리가 사용하고 있는 className만 Netlify 최종 CSS build에 추가 된다
     > Now whenever you compile your CSS with `NODE_ENV` set to `production`, Tailwind will automatically purge unused styles from your CSS    
     📄최신update: https://tailwindcss.com/docs/upgrade-guide
-    total 323.7MB                         
+    total 323.7MB
+
+  5. 🚨https://main--lucent-treacle-3fb451.netlify.app/
+    ⚡https://main--lucent-treacle-3fb451.netlify.app/create-account 새로고침⚡
+    > 🚫Page Not Found > ⭐root 폴더가 아니라서 그렇다  
+    > Netlify가 create-account라는 폴더를 찾으려고 하는데 존재하지 않음
+    > redirect: 📄https://docs.netlify.com/routing/redirects/#app
+    > [_redirects] ⭐어떤 페이지로 가든 전부 /index.html로 간다
+      /* /index.html 200(코드)
+    > index.html은 react application을 포함하고 있는 페이지 
+    > react application에서 path를 결정                            

@@ -13,10 +13,6 @@ module.exports = {
     './public/index.html',
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
-  purge:[
-    './public/**/*.html',
-    './src/**/*.{js,jsx,ts,tsx,vue}',
-  ],
   theme: {
     extend: {
       colors:{
