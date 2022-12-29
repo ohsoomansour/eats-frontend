@@ -46,6 +46,7 @@ const EDIT_PROFILE_MUTATION = gql`
 interface IFormProps {
   email?:string;
   password?:string;
+  address?:string;
 }
 export const EditProfile = () => {
 
@@ -94,11 +95,12 @@ export const EditProfile = () => {
   });
 
   const onSubmit = () => {
-    const { email, password } = getValues();
+    const { email, password, address } = getValues();
     editProfile({
       variables:{
         input:{
           email,
+          address,
         ...(password !== "" && {password})
         }
 
@@ -119,12 +121,23 @@ export const EditProfile = () => {
           })} 
           className="input" 
           type="email" 
-          placeholder="Email"/>
+          placeholder="Email"
+        />
         <input 
           {...register("password")}
           className="input" 
           type="password" 
-          placeholder="password"/>
+          placeholder="password"
+        />
+        <input 
+          {...register("address")}
+          className="input"
+          type="text"
+          placeholder="Address"
+        />
+
+
+
         <Button loading={loading} canClick={formState.isValid} actionText="Save Profile"  />
 
       </form>

@@ -3,7 +3,21 @@
 
 /*#️⃣22.2 File Upload part One
   1. File upload: 📃https://docs.nestjs.com/techniques/file-upload
-     - 백엔드: npx nest g mo uploads > 백엔드 upload파일
+    -  
+    - 백엔드: npx nest g mo uploads > 백엔드 upload파일
+
+  2. 프론트엔드
+    🔷FormData(HTML Element)는 폼을 쉽게 보내도록 도와주는 객체
+      - 형식: const formData = new FormData()
+      - method: formData.append(name, value, fileName)
+      - Content-Type: 속성은 multipart/form-data로 지정된 후 전송 
+      - 사용예시
+        const formData = new FormData()
+        formData.append('file', autualFile)
+
+ 
+     
+
   #️⃣22.4 Create Restaurant part Two
   1. 용어 정리   
     🔹image/*: 모든 타입의 이미지 파일이 허용됨 
@@ -15,7 +29,17 @@
     
     🔹FormData: Rest api인 Ajax로 폼(폼 태그) 전송을 가능하게 해주는  
       - html에 form 태그가 없을 때: new FormData() 로 생성  
- 
+    🔹HTTP Header: Body의 형식, Content-type
+      form의 enctype 속성값: 폼 데이터가 서버로 제출될때 해당 데이터가 인코딩되는 방법을 명시
+      1) application/x-www-form-urlencoded: default값으로, 모든 문자들을 서버로 보내기 전에 인코딩됨을 명시 
+      2) text/plain: 공백 문자는 기호로 변환, 나머지 문자는 모두 인코딩되지 않음을 명시
+      3) multipart/form-data: 모든 문자를 인코딩하지 않음을 명시, <form>요소가 파일이나 이미지를 서버로 전송할 때
+        ⭐'POST'로 보내줘야 한다
+        ⭐필요한 이유: 사진 파일  + 사진 설명 
+         const formData = new FormData()
+         formData.append("photo", files[0].uploadedFile);
+         formData.append("comment", commentNocomment)
+
   2. 
     🚨Access to fetch at 'http://localhost:4000/uploads/' from origin 'http://localhost:3000' has been blocked by CORS policy
     : No 'Access-Control-Allow-Origin' header is present on the requested resource.
@@ -33,21 +57,23 @@
       - 사용법: refetchQueries:[{query: ✅MY_RESTAURANT}]
       - 사용 이유: ⭐레스토랑을 생성 후 다시 돌아오면 '레스토랑이 생성 되지 않은거 처럼 보임' 
       - 프로세스: mutation이 정상 작동후, ⚡MY_RESTAURANT_QUERY refetch됨
-      - cache의 이해: 처음부터 localhost:3000/add-restaurant으로 이동 > My Restaurants 페이지로 가면
+      - cache의 이해: 처음부터 localhost:3000/add-restaurant으로 이동 > http://localhost:3000/  'My Restaurants' 페이지로 가면
                      My Restaurants에는 cache가 없다   
-   
-  2.cache                   
+       
+  2.📄DOCS: Apollo Client allows you to make local(+cashe) modifications to your GraphQL data by updating the cache
+    🔹by updating the cache: ⚡refetchQueries작업
+
     
  */
-  import { gql, useApolloClient, useMutation } from "@apollo/client";
-  import React, { useState } from "react";
-  import { Helmet } from "react-helmet";
-  import { useForm } from "react-hook-form";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
+import React, { useState } from "react";
+import { Helmet } from "react-helmet";
+import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-  import { Button } from "../../components/button";
-  import { FormError } from "../../components/form-error";
-  import { CreateRestaurantMutation, CreateRestaurantMutationVariables } from "../../__generated__/types";
-  import { MY_RESTAURANTS_QUERY } from "./my-restaurants";
+import { Button } from "../../components/button";
+import { FormError } from "../../components/form-error";
+import { CreateRestaurantMutation, CreateRestaurantMutationVariables } from "../../__generated__/types";
+import { MY_RESTAURANTS_QUERY } from "./my-restaurants";
 
  const CREATE_RESTAURANT_MUTATION = gql`
  mutation createRestaurant($input:CreateRestaurantInput!){
@@ -67,9 +93,11 @@ interface IFormProps {
 }
 
 export const AddRestaurant = () => {
+  
   const client = useApolloClient()
   const [ImageUrl, setImageUrl] = useState("")
   const history = useHistory()
+
   const onCompleted = (data: CreateRestaurantMutation) => {
     const {
       createRestaurant:{ ok, restaurantId }
@@ -82,7 +110,7 @@ export const AddRestaurant = () => {
         query: MY_RESTAURANTS_QUERY,
         
       })
-     
+
       client.writeQuery({
         query:MY_RESTAURANTS_QUERY,
         data:{
@@ -92,8 +120,8 @@ export const AddRestaurant = () => {
               {
                 address,
                 category: {
-                    "__typename": "Category",
-                    name: categoryName, 
+                  "__typename": "Category",
+                  name: categoryName, 
                 },
                 coverImage: ImageUrl,
                 id: restaurantId,
@@ -103,8 +131,6 @@ export const AddRestaurant = () => {
                 
               },
               ...queryResult.myRestaurants.restaurants
-
-              
             ]
           }
         }
@@ -117,7 +143,7 @@ export const AddRestaurant = () => {
      CreateRestaurantMutationVariables
   >(CREATE_RESTAURANT_MUTATION, {
       onCompleted,
-      
+      //refetchQueries:[{query:MY_RESTAURANTS_QUERY}]
     })
 
   const {handleSubmit, register, getValues, formState:{errors}, formState} = useForm<IFormProps>({

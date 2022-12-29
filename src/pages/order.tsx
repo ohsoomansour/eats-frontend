@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
@@ -28,6 +28,10 @@ import {
     > const onButtonClick = (newStatus: OrderStatus) => {
       
      }   
+
+ #️⃣ 
+   🔹const {data, subscribeToMore} = useQuery()
+     📄https://www.apollographql.com/docs/react/data/queries#result    
 */
 const GET_ORDER = gql`
   query getOrder($input: GetOrderInput!){

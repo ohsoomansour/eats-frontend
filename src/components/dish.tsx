@@ -1,5 +1,5 @@
 import { ChildProps } from "postcss";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 /*#️⃣24.0 Extending the Dish Component
   1. null과 undefined의 차이
@@ -84,8 +84,7 @@ const onClick = () => {
               onClick={onClick}>
                 {isSelected ? "Remove" : "Add"}
             </button>
-          )}
-          
+          )}          
         </h3>
         <h4 className=" font-medium">{description}</h4>
       </div>

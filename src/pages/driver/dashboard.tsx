@@ -19,9 +19,10 @@
        - 직접 웹에서도 위치 정보를 수집, 주기적으로 위치 정보를 수집하여 갱신 watchPosition()
      🔹lat = latitude(위도), 적도에서 북쪽으로 나아갈수록 위도선은 1도씩 증가
      🔹lng = longitude(경도)
-     🔹coord: coordinates(좌표)
+     🔹coord: coordinates(좌표)  
     
    2. 🔷Use Google Maps API
+        📄https://www.npmjs.com/package/google-map-react
        🔹Google Maps API Loads on Demand: There is no need to place a <script src= tag at top of page.
          The Google Maps API loads upon the first usage of the GoogleMapReact component.
        🔹onGoogleApiLoaded: You can access to Google Maps map and maps objects by using onGoogleApiLoaded,
@@ -33,7 +34,8 @@
          > map은 Map의 인스턴스이다 
        🔹 maps: 내가 사용할 수 있는 Google Maps 객체  
          google map api sdk > 📄https://developers.google.com/maps/documentation/javascript/reference/map#Map.constructor
-      🔷panTo(latLng) 
+      🔷panTo(latLng)
+       📄https://developers.google.com/maps/documentation/javascript/reference/map  
        🔹latLng: The new center latitude/longitude of the map 
        🔹내용:Changes the map center to the specified LatLng. 
              If the change is less than the width and height of the map, the transition is animated smoothly.  
@@ -58,7 +60,7 @@
    1. TypeScript and Google Maps - 📄developers.google.com/maps/documentation/javascript/using-typescript
      > 설치: npm i -D @types/google.maps
      > 컴파일 > [tsconfig.json]
-     > 
+      
    2. Google Map을 웹 사이트에 로드하는 순간 > google.maps객체가 window에 있음
 
    3. 🚀New 주문 > driver에게 어디를 가야 할지 알려줌 > 🚀Subscription:  
@@ -87,14 +89,17 @@
   #️⃣25.11 Final Test
     1. 준비: Customer(크롬) / Owner(Edge) / Delivery(firefox)
 
-
+  
+    
+    🔹TailwindCSS: hover 참고블로그 - 📄https://tailwind-elements.com/docs/standard/components/hover-effects/
     */
+  
 import React, { useEffect, useState } from "react" 
 import GoogleMapReact from 'google-map-react'
 import { gql, useMutation, useSubscription } from "@apollo/client";
 import { FULL_ORDER_FRAGMENT } from "../../fragment";
 import { CookedOrdersSubscription, TakeOrderMutation, TakeOrderMutationVariables } from "../../__generated__/types";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const COOKED_ORDER_SUBSCRIPTION = gql`
   subscription cookedOrders{
@@ -113,7 +118,6 @@ const TAKE_ORDER_MUTATION = gql`
   }
 `
 
-
 interface ICoords {
   lat:number;
   lng:number;
@@ -125,16 +129,23 @@ interface IDriverProps {
 }
 const KaKaoMapApp = () => {
  
-
+  //border-double border-4 rounded-md
   return(
-    <a  href="https://map.kakao.com/link/to/옥동">
-      <h1 className=" text-lg font-semibold mt-10 " >카카오 맵</h1>
-      <img
-        className=" inline"
-        src="https://developers.kakao.com/assets/img/about/buttons/navi/kakaonavi_btn_medium.png" 
-        alt="길 안내하기 버튼">
-      </img>
-    </a>
+    <span className=" flex flex-row justify-start">
+      <div className=" flex flex-col items-center ">
+        <p className=" text-center text-lg font-semibold mt-10 " >카카오 맵</p>
+        <a href="https://map.kakao.com/link/to/옥동">
+          
+          <img
+            className=" animate-pulse border-double border-4 rounded-md"
+            src="https://developers.kakao.com/assets/img/about/buttons/navi/kakaonavi_btn_medium.png" 
+            alt="길 안내하기 버튼"
+          >
+          </img>
+        </a>
+        <p className=" font-semibold">A useful map in Korea</p>
+      </div>
+    </span>
   )
 }
 
@@ -142,12 +153,14 @@ const KaKaoMapApp = () => {
 export const Dashboard = () => {
 
   const {data:cookedOrdersData} = useSubscription<CookedOrdersSubscription>(COOKED_ORDER_SUBSCRIPTION)
+  
   const history = useHistory()
   const onCompleted = (data: TakeOrderMutation) => {
     if(data.takeOrder.ok){
       history.push(`/orders/${cookedOrdersData?.cookedOrders.id}`)
     }
   }
+  
   const triggerMutation = (orderId: number  ) => {
     takeOrderMuataion({
       variables:{
@@ -169,12 +182,12 @@ export const Dashboard = () => {
   const [map, setMap] = useState<google.maps.Map>()
   const [maps, setMaps] = useState<any>();
   // @ts-ignore
-  const onSuccess = ({coords:{latitude, longitude}}:Position) => {
-    
+
+  const onSuccess = ({coords:{latitude, longitude}}:GeolocationPosition) => {
     setDriverCoords({lat: latitude, lng: longitude})
   }
   // @ts-ignore
-  const onError = (error: PositionError) => {
+  const onError = (error: GeolocationPositionError) => {
     console.log(error)
 
   }
@@ -190,17 +203,19 @@ export const Dashboard = () => {
 
   useEffect(() => {
     if(map && maps){
+      
       map.panTo(new google.maps.LatLng(driveCoords?.lat, driveCoords?.lng))
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({
         location: new google.maps.LatLng(driveCoords.lat, driveCoords.lng)
       },(results, status) => {
-        //console.log(results, status)
+        console.log(results, status)
       })
     }
   },[driveCoords?.lat, driveCoords?.lng])
   const onApiLoaded = ({map, maps}: {map:any, maps:any}) => {
     map.panTo(new maps.LatLng(driveCoords?.lat, driveCoords?.lng))
+  
     setMap(map)
     setMaps(maps)
     
@@ -213,24 +228,28 @@ export const Dashboard = () => {
         polylineOptions:{
           strokeColor:"#e84393",
           strokeOpacity:0.8,
-          strokeWeight:10,
+          strokeWeight:3,
 
         }
       })
       directionsRenderer.setMap(map)
       directionsService.route({
         origin:{
-          location:  new google.maps.LatLng(driveCoords.lat, driveCoords.lng)
+          //location:  new google.maps.LatLng(driveCoords.lat, driveCoords.lng)
+          query: cookedOrdersData?.cookedOrders.restaurant.address
         },
         destination:{
-          location:  new google.maps.LatLng(driveCoords.lat + 0.02, driveCoords.lng + 0.02)
+          query: cookedOrdersData?.cookedOrders.customer?.address
+          //location:  new google.maps.LatLng(driveCoords.lat + 0.02, driveCoords.lng + 0.02)
         },
-        travelMode: google.maps.TravelMode.TRANSIT
+        travelMode: google.maps.TravelMode.DRIVING
       }, (result, status) => {
+        console.log(result, status)
         directionsRenderer.setDirections(result)
       })
     }
   }
+  makeRoute();
   
   return (
     
@@ -246,13 +265,16 @@ export const Dashboard = () => {
           bootstrapURLKeys={{key: "AIzaSyD7943MbbZnoYpbMPA8Eor7XF9tG6di-2A"}}
           defaultCenter={{
             lat:35.5386376,
-            lng:129.2887282
+            lng:129.2887282,
           }}
           defaultZoom={15}
         >
              
-        </GoogleMapReact> 
+        </GoogleMapReact>
+         
       </div>
+      <p className=" font-sans text-lg text-gray-600 from-neutral-100"> 🚨주의사항: 구글 지도의 한국 도로에서는 '환승모드' 이외의 '운전', '걷기', '자전거' 모드는 지원되지 않습니다.</p>
+
       <KaKaoMapApp />
       <div className=" max-w-screen-sm  mx-auto bg-white relative -top-10 shadow-lg py-8 px-5">
       {cookedOrdersData?.cookedOrders.restaurant ?(

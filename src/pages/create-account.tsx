@@ -17,7 +17,20 @@ import Helmet from "react-helmet";
    emai: ohsoomansour@naver.com
    password: 284823  
    role:Client
-*/
+
+  3. 용어정리 
+   🔹GraphQL SDL(Schema Definition Language)
+     예시) type Person {
+             name: String!
+             age: Int!
+            }
+   🔹transpile vs compile 
+     - 📄https://ideveloper2.tistory.com/166
+     - transpile: 비슷한 수준의 추상화 예) es6 > es5 , ts > JS
+     - 한 언어로 작성된 소스 코드를 다른 언어로 변환하는 것
+
+    🔹tsconfig.js - include등 블로그 참조 📄https://kay0426.tistory.com/69
+     */ 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
@@ -31,7 +44,9 @@ interface ICreateAccountForm {
   email: string;
   password: string;
   role: UserRole;
-}   
+  address:string;
+}
+
 export const CreateAccount= () => {
   const {register,
     getValues,
@@ -49,6 +64,7 @@ export const CreateAccount= () => {
     const {
       createAccount:{ ok }
     } = data;
+    console.log(data)
     if(ok){
       alert("Account is created! Log in now")
       history.push("/")
@@ -61,17 +77,19 @@ export const CreateAccount= () => {
   >(CREATE_ACCOUNT_MUTATION, {
     onCompleted
   })
+  
 
 
   const onValid = () => {
     if(!loading){
-      const {email, password, role} = getValues()
+      const {email, password, role, address} = getValues()
       createAccount({
         variables:{
           createAccountInput:{
             email,
             password,
-            role
+            role,
+            address
           }
         }
       });
@@ -126,6 +144,16 @@ export const CreateAccount= () => {
             <option key={index}>{role}</option>
           ))}
         </select>
+        <input 
+          {...register("address", {required: "Address is required"} )}
+          className="input"
+          placeholder="Address"
+        />
+        {errors.address?.message && (
+          <FormError errorMessage={errors.address.message} />
+        )}
+
+
         <Button 
           canClick={formState.isValid}
           loading={loading}
@@ -136,6 +164,7 @@ export const CreateAccount= () => {
             errorMessage={createAccountMutationResult.createAccount.error}
           />
         )}
+
       </form>
       <div>
         Already use Uber?{" "}

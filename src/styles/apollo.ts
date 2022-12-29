@@ -117,9 +117,9 @@ import { createClient } from 'graphql-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 
 
-const token = localStorage.getItem(LOCALSTORAGE_TOKEN)      
-export const isLoggedInVar = makeVar(Boolean(token)) 
-export const authTokenVar = makeVar(token)
+const token = localStorage.getItem(LOCALSTORAGE_TOKEN);      
+export const isLoggedInVar = makeVar(Boolean(token)); 
+export const authTokenVar = makeVar(token);
 
 const wsLink = new GraphQLWsLink(createClient({
   url: 
@@ -161,8 +161,9 @@ const splitLink = split(
   authLink.concat(httpLink),
 );
 
-
+// 캐시 <-- 상호 작용 --> local data(reactive variable & local state)
 export const client = new ApolloClient({
+  connectToDevTools:true,
   link: splitLink ,
   cache: new InMemoryCache({
     typePolicies:{
@@ -184,3 +185,4 @@ export const client = new ApolloClient({
     }
   }),
 });
+

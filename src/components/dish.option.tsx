@@ -20,7 +20,7 @@ export const DishOption:React.FC<IDishOptionProps> = ({
 }) => {
 
 
-const  onClick = () => {
+const onClick = () => {
   if(isSelected){
     removeOptionFromItem(dishId, name); //⭐항상 옵션 제거가 우선순위 > 옵션 첨가 
   } else {

@@ -49,6 +49,7 @@ export type CategoryOutput = {
 };
 
 export type CreateAccountInput = {
+  address: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
   role: UserRole;
@@ -113,7 +114,7 @@ export type CreateRestaurantOutput = {
   __typename?: 'CreateRestaurantOutput';
   error?: Maybe<Scalars['String']>;
   ok: Scalars['Boolean'];
-  restaurantId: Scalars['Int'];
+  restaurantId?: Maybe<Scalars['Int']>;
 };
 
 export type DeleteDishInput = {
@@ -200,6 +201,7 @@ export type EditOrderOutput = {
 };
 
 export type EditProfileInput = {
+  address?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
 };
@@ -373,6 +375,7 @@ export type MyRestaurantsOutput = {
 
 export type Order = {
   __typename?: 'Order';
+  address: Scalars['String'];
   createdAt: Scalars['DateTime'];
   customer?: Maybe<User>;
   driver?: Maybe<User>;
@@ -563,6 +566,7 @@ export type TakeOrderOutput = {
 
 export type User = {
   __typename?: 'User';
+  address: Scalars['String'];
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['Float'];
@@ -607,7 +611,7 @@ export type DishPartsFragment = { __typename?: 'Dish', id: number, name: string,
 
 export type OrderPartsFragment = { __typename?: 'Order', id: number, createdAt: any, total: number };
 
-export type FullOrderPartsFragment = { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant: { __typename?: 'Restaurant', name: string } };
+export type FullOrderPartsFragment = { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string, address: string } | null, customer?: { __typename?: 'User', email: string, address: string } | null, restaurant: { __typename?: 'Restaurant', name: string, address: string } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -659,7 +663,7 @@ export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { 
 export type CookedOrdersSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CookedOrdersSubscription = { __typename?: 'Subscription', cookedOrders: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant: { __typename?: 'Restaurant', name: string } } };
+export type CookedOrdersSubscription = { __typename?: 'Subscription', cookedOrders: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string, address: string } | null, customer?: { __typename?: 'User', email: string, address: string } | null, restaurant: { __typename?: 'Restaurant', name: string, address: string } } };
 
 export type TakeOrderMutationVariables = Exact<{
   input: TakeOrderInput;
@@ -680,14 +684,14 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'Query', getOrder: { __typename?: 'GetOrderOutput', ok: boolean, error?: string | null, order?: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant: { __typename?: 'Restaurant', name: string } } | null } };
+export type GetOrderQuery = { __typename?: 'Query', getOrder: { __typename?: 'GetOrderOutput', ok: boolean, error?: string | null, order?: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string, address: string } | null, customer?: { __typename?: 'User', email: string, address: string } | null, restaurant: { __typename?: 'Restaurant', name: string, address: string } } | null } };
 
 export type OrderUpdatesSubscriptionVariables = Exact<{
   input: OrderUpdatesInput;
 }>;
 
 
-export type OrderUpdatesSubscription = { __typename?: 'Subscription', orderUpdates: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant: { __typename?: 'Restaurant', name: string } } };
+export type OrderUpdatesSubscription = { __typename?: 'Subscription', orderUpdates: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string, address: string } | null, customer?: { __typename?: 'User', email: string, address: string } | null, restaurant: { __typename?: 'Restaurant', name: string, address: string } } };
 
 export type EditOrderMutationVariables = Exact<{
   input: EditOrderInput;
@@ -708,7 +712,7 @@ export type CreateRestaurantMutationVariables = Exact<{
 }>;
 
 
-export type CreateRestaurantMutation = { __typename?: 'Mutation', createRestaurant: { __typename?: 'CreateRestaurantOutput', ok: boolean, error?: string | null, restaurantId: number } };
+export type CreateRestaurantMutation = { __typename?: 'Mutation', createRestaurant: { __typename?: 'CreateRestaurantOutput', ok: boolean, error?: string | null, restaurantId?: number | null } };
 
 export type MyRestaurantQueryVariables = Exact<{
   input: MyRestaurantInput;
@@ -720,7 +724,7 @@ export type MyRestaurantQuery = { __typename?: 'Query', myRestaurant: { __typena
 export type PendingOrdersSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PendingOrdersSubscription = { __typename?: 'Subscription', pendingOrders: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant: { __typename?: 'Restaurant', name: string } } };
+export type PendingOrdersSubscription = { __typename?: 'Subscription', pendingOrders: { __typename?: 'Order', id: number, status: OrderStatus, total: number, driver?: { __typename?: 'User', email: string, address: string } | null, customer?: { __typename?: 'User', email: string, address: string } | null, restaurant: { __typename?: 'Restaurant', name: string, address: string } } };
 
 export type MyRestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 

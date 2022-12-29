@@ -50,6 +50,7 @@ export const MY_RESTAURANT_QUERY = gql`
     myRestaurant(input:$input){
       ok
       error
+      
       restaurant{
         ...RestaurantParts
         menu{
@@ -79,6 +80,7 @@ interface IPrams {
   id: string;
 }
 
+//useQuery는 Myrestaurant이 렌더링 되면 바로 execute vs useMuatation에  mutation function을 호출 해줘야 한다
 export const Myrestaurant = () => {
   const { id } = useParams<IPrams>()
   const {data} = useQuery<MyRestaurantQuery, MyRestaurantQueryVariables>(
@@ -92,7 +94,7 @@ export const Myrestaurant = () => {
   const {data: subscriptionData} = useSubscription<PendingOrdersSubscription>(
     PENDING_ORDERS_SUBSCRIPTION)
     
-    console.log(subscriptionData)
+    //console.log(subscriptionData)
     const history = useHistory()
     useEffect(() => {
       if(subscriptionData?.pendingOrders.id){

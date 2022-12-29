@@ -6,7 +6,9 @@ import { DishOption } from "../../components/dish.option"
 import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragment"
 import { CreateOrderItemInput, CreateOrderMutation, CreateOrderMutationVariables, RestaurantQuery, RestaurantQueryVariables } from "../../__generated__/types"
 
+/*#️⃣ParentComponent > childComponent
 
+*/
 
 const RESTAURANT_QUERY = gql`
   query restaurant($input:RestaurantInput!){
@@ -53,18 +55,20 @@ export const Restaurant = () => {
     }
   })
   const [orderStarted, setOrderStarted] = useState(false)
+  //주문했던 repository라고 생각 + new 주문을 추가
   const [orderItems, setOrderItems] = useState<CreateOrderItemInput[]>([])
   const triggerStartOrder = () => {
     setOrderStarted(true)
   }
-  const getItem = (dishId:number) => {
-    return orderItems.find(order => order.dishId === dishId)
-  }
   const isSelected = (dishId: number) => {
     return Boolean(getItem(dishId))
   }
+  const getItem = (dishId:number) => {
+    return orderItems.find(order => order.dishId === dishId)
+  }
 
   const addItemToOrder = (dishId:number) => {
+    //이미 선택된 'dish'이면 선택하지 않음 
     if(isSelected(dishId)){
       return;
     }
@@ -86,7 +90,8 @@ export const Restaurant = () => {
   }
 
   const getOptionFromItem = (item: CreateOrderItemInput, optionName:string ) => {
-    return item.options?.find(option => option.name === optionName)
+    //⭐ OrderItems안에서 get한 'item의 option' === optionName은 순회
+    return item.options?.find(option => option.name === optionName) 
   }
   //⭐addOptionToItem 작성 이유: react.js에서는 새 state를 확인 하고 re-render하는 것 
   const addOptionToItem = (dishId:number, optionName:string) => {
@@ -100,6 +105,7 @@ export const Restaurant = () => {
         oldItem.options?.find((aOpton) => aOpton.name === optionName)
       )
       if(!hasOption){
+        //⭐OrderItems에서 'dish'를 - + 한걸 필터 함 
         removeFromOrder(dishId)
         setOrderItems((current) => [
           {dishId, options:[{name: optionName}, ...oldItem.options!]}, //의미: undefined가 아닌 options가 존재!

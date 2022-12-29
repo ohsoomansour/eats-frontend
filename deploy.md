@@ -26,7 +26,7 @@
     git add . (전체하는게 편함 )
     git commit -m "second commit" 
     git remote -v : 내가 설정해둔 원격저장소 이름과 URL을 확인 할 수 있음 
-    git remote add origin https://github.com/ohsoomansour/CodeChallenge5_revised1.git > error: remote origin already exists.
+    git remote add origin https://github.com/ohsoomansour/eats-frontend.git > error: remote origin already exists.
     > git remote rm origin: "🚧연결이 잘못되었으면 연결을 해제함🚧"
     git push -u origin main
     > 수정커밋하고 나서 재배포 해야함 npm run deploy
@@ -49,11 +49,12 @@
 
   🔥github.com/search?q=user%3Asoo-sin   
  
- #️⃣26.3 Netlify 
-  1. github id / pw
-  2. https://app.netlify.com/start/repos
+ #️⃣26.3 Netlify - 
+  1. github id:ceoosm@naver.com / pw: (나)수르@34
+  2. https://app.netlify.com/start/
     > Connect to Git provider
     > Pick a repository Github repository: eats-frontend
+    > "tailwind:build도 확인해야 한다❗"
      - "script":{
          "prebuild":"npm run tailwind:build",
         }

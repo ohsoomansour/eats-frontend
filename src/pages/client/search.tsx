@@ -60,7 +60,33 @@ import { SearchRestaurantQuery, SearchRestaurantQueryVariables } from "../../__g
         
         🔹방법2const location = useLocation()  --- ⚡{pathname: '/search', search: '?term=korean', hash: '', key: 'hacfgs'}
           const query = new URLSearchParams(location.search).get('term')
-        🔹참조: 백엔드 -> #️⃣11.17 Restaurant and Search ~ #️⃣11.18 
+        🔹참조: 백엔드 -> #️⃣11.17 Restaurant and Search ~ #️⃣11.18       
+*/
+/*#️⃣용어 정리
+    1. 벡틱(``)의 사용
+      🔹줄바꿈: "줄바꿈을 그대로 인식"
+        var vectic = `
+          Hi
+            its'me 
+        `
+        console.log(vectic) 
+      🔹표현식의 삽입(Express interpolation): 변수나 연산 등을 삽입 
+        var name = 'SM'
+        제 이름은 `${name}` 입니다.   
+    2. URL VS URI
+      🚀http://www.google.co.kr:80/hakawati/uri.php?url=urn
+      - http: 프로토콜                      - +
+      - www: 서브 도메인                      |
+      - google: Domain
+      - co: Country Code Top Level Domain    | -- ⭐URL 
+      - kr: TLD 
+      - :80 port                             |            ------+
+      - hakawati: path "해당 자원의 위치"   - +                  |
+                                                                | --- ⭐URI   
+      - uri: page                                               |   
+      - .php: extension                                   ------+
+      - ?uri=urn: Parameter    
+
 */
 const SEARCH_RESTAURANT = gql`
   query searchRestaurant($input: SearchRestaurantInput!){
@@ -81,12 +107,13 @@ const SEARCH_RESTAURANT = gql`
 export const Search = () => {
   const history = useHistory()
   const location = useLocation() 
+  
   const query = new URLSearchParams(location.search).get('term')
-
+  
   const [queryReadyToStart, {loading, data, called}] = useLazyQuery<
     SearchRestaurantQuery,
     SearchRestaurantQueryVariables
-  >(SEARCH_RESTAURANT)
+  >(SEARCH_RESTAURANT )
 
   useEffect(() => {
 
@@ -103,7 +130,7 @@ export const Search = () => {
     })
 
   },[])
-  console.log(data)
+  
   return (
     <div>
       <Helmet>

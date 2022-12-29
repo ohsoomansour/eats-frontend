@@ -55,13 +55,16 @@ export const FULL_ORDER_FRAGMENT = gql`
     status
     total
     driver{
-      email
+      email,
+      address
     }
     customer{
-      email
+      email,
+      address
     }
     restaurant{
-      name
+      name,
+      address
     }  
   }
 `

@@ -6,7 +6,10 @@
   2.tailwind 컬러 확장: 📄tailwindcss.com/docs/customizing-colors
     2-1) const colors = require('tailwindcss/colors')  
     2-2) IntelliSense는 'tailwind.config.js' file을 읽는다 
-   */
+   
+  3. 🔹template:컨텐츠만 살짝 바꿔서 즉시 사용할 수 있는 코드 집합 
+                반복적인 HTML 부분을 template로 만들어두고 사용
+    */
 const colors = require('tailwindcss/colors')  
 module.exports = {
   content: [
