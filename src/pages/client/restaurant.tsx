@@ -57,16 +57,18 @@ export const Restaurant = () => {
   const [orderStarted, setOrderStarted] = useState(false)
   //주문했던 repository라고 생각 + new 주문을 추가
   const [orderItems, setOrderItems] = useState<CreateOrderItemInput[]>([])
+
   const triggerStartOrder = () => {
     setOrderStarted(true)
   }
+  //dish entity에서 해당 dishId를 불러와서 
   const isSelected = (dishId: number) => {
     return Boolean(getItem(dishId))
   }
   const getItem = (dishId:number) => {
     return orderItems.find(order => order.dishId === dishId)
   }
-
+  
   const addItemToOrder = (dishId:number) => {
     //이미 선택된 'dish'이면 선택하지 않음 
     if(isSelected(dishId)){

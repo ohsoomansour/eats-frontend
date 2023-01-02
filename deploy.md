@@ -67,6 +67,7 @@
      🔹CI(Continuous Integration): 지속적인 통합, App의 버그 수정 또는 새로운 코드 변경이
                                    주기적으로 빌드 및 테스트 되면서 공유되는 레퍼지토리에 통합 되는 것           
     > git add . > git commit -m "CI commit" > git push origin 
+
   4. Tailwind 파일이 커서 압축 파일로 build 
     > 📃tailwindcss.com/docs/optimizing-for-production
     > purge 는 우리가 사용하고 있는 className만 Netlify 최종 CSS build에 추가 된다
@@ -74,11 +75,11 @@
     📄최신update: https://tailwindcss.com/docs/upgrade-guide
     total 323.7MB
 
-  5. 🚨https://main--lucent-treacle-3fb451.netlify.app/
-    ⚡https://main--lucent-treacle-3fb451.netlify.app/create-account 새로고침⚡
+  5. 🚨https://lighthearted-stroopwafel-c4c50f.netlify.app/
+    ⚡https://lighthearted-stroopwafel-c4c50f.netlify.app//create-account 새로고침⚡
     > 🚫Page Not Found > ⭐root 폴더가 아니라서 그렇다  
-    > Netlify가 create-account라는 폴더를 찾으려고 하는데 존재하지 않음
-    > redirect: 📄https://docs.netlify.com/routing/redirects/#app
+    > 해석: "Netlify가 create-account라는 폴더를 찾으려고 하는데 존재하지 않음"
+    > 💊redirect: 📄https://docs.netlify.com/routing/redirects/#app
     > [_redirects] ⭐어떤 페이지로 가든 전부 /index.html로 간다
       /* /index.html 200(코드)
     > index.html은 react application을 포함하고 있는 페이지 
@@ -88,3 +89,5 @@
       🚫localhost에 연결 하고 싶은게 아님
       🚧"heroku eats-backend에 있는 API에 연결 하고 싶다"🚧
       🔵URL을 변경 해줘야 한다: [apollo.ts] 
+    
+     

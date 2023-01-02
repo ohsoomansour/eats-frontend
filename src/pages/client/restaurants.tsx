@@ -115,7 +115,7 @@ export const Restaurants = () => {
           }
         }
       })
-    console.log(data)
+  //console.log(data)
     
   const onNextPageClick = () => setPage(current => current + 1 )  
   const onPrevPageClick = () => setPage(current => current - 1 )

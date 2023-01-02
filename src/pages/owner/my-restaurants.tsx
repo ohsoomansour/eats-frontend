@@ -1,11 +1,3 @@
-import { gql, useApolloClient, useQuery } from "@apollo/client";
-import React, { useEffect } from "react";
-import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
-import { RESTAURANT_FRAGMENT } from "../../fragment";
-import { MyRestaurantsQuery, MyRestaurantsQueryVariables } from "../../__generated__/types";
-import { Restaurant } from "../../components/restaurant";
-
 /*#️⃣22.1 Create Restaurant part One
   1. 컨셉: 음식점을 upload 가능한 create restaurant 스크린으로 이동    
   */
@@ -100,6 +92,25 @@ import { Restaurant } from "../../components/restaurant";
   4. Cache와 직접적으로 상호작용하는 방법:(API를 건드리지 않고!) Restaurant 생성 그 자체를 fake 
       
   */ 
+  import { gql,  useApolloClient,  useQuery } from "@apollo/client";
+  import { Helmet } from "react-helmet";
+  import { Link } from "react-router-dom";
+  import { RESTAURANT_FRAGMENT } from "../../fragment";
+  import { MyRestaurantsQuery } from "../../__generated__/types";
+  import { Restaurant } from "../../components/restaurant";
+  import styled from "styled-components";
+import { useEffect } from "react";
+
+  const H = styled.h2`
+    color:black;
+    font-size:40px;
+    font-weight:20px;
+    font-family:'Covered By Your Grace', cursive;
+    margin-bottom:20px;
+    background-color:white;
+        
+  `;
+
 export const MY_RESTAURANTS_QUERY = gql`
   query MyRestaurants{
     myRestaurants{
@@ -116,20 +127,26 @@ export const MY_RESTAURANTS_QUERY = gql`
  
 export const MyRestaurants = () => {
   const {data} = useQuery<
-    MyRestaurantsQuery,
-    MyRestaurantsQueryVariables
+    MyRestaurantsQuery
   >(MY_RESTAURANTS_QUERY)
-  
-  
+  //console.log(data)
+  //MyRestaurants 컴포넌트가 렌더링 될 때 useEffect가 한 번 실행이 된다 
+  const client = useApolloClient()
+  useEffect(() => {
+    const queryResults = client.readQuery({query:MY_RESTAURANTS_QUERY})
+    console.log(queryResults)
+  }, [])
 
-
+  //
   return (
     <div>
       <Helmet>
         <title>My Restaurants | Nuber Eats </title>
       </Helmet>
      <div className=" container mt-32">
-      <h2 className=" text-4xl font-medium mb-10">My Restaurants</h2>
+      <H className=" text-3xl font-medium mb-10 bg-white shadow-lg ">
+        My Restaurants
+      </H>
       {data?.myRestaurants.ok &&
        data.myRestaurants.restaurants.length === 0 ? (
           <>

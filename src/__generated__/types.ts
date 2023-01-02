@@ -714,6 +714,13 @@ export type CreateRestaurantMutationVariables = Exact<{
 
 export type CreateRestaurantMutation = { __typename?: 'Mutation', createRestaurant: { __typename?: 'CreateRestaurantOutput', ok: boolean, error?: string | null, restaurantId?: number | null } };
 
+export type DeleteDishMutationVariables = Exact<{
+  input: DeleteDishInput;
+}>;
+
+
+export type DeleteDishMutation = { __typename?: 'Mutation', deleteDish: { __typename?: 'DeleteDishOutput', ok: boolean, error?: string | null } };
+
 export type MyRestaurantQueryVariables = Exact<{
   input: MyRestaurantInput;
 }>;

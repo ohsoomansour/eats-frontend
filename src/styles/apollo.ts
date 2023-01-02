@@ -130,7 +130,7 @@ const wsLink = new GraphQLWsLink(createClient({
   connectionParams:{
     "x-jwt": authTokenVar() || ""
   }
-}));
+})); 
 
 
 const httpLink = createHttpLink({

@@ -1,3 +1,47 @@
+/*#️⃣22.5 Cache Optimazation part One
+  1. readQuery & writeQuery 사용
+    {
+    "myRestaurant": {
+        "__typename": "MyRestaurantOutput",
+        "ok": true,
+        "error": null,
+        "restaurant": {
+            "__typename": "Restaurant",
+          ⭐"menu": [
+                {
+                    "__typename": "Dish",
+                    "id": 25,
+                    "name": "Guda42_dongas",
+                    "price": 10,
+                    "photo": null,
+                    "description": "Delicious",
+                    "options": []
+                }
+            ],
+            "orders": [
+                {
+                    "__typename": "Order",
+                    "id": 70,
+                    "createdAt": "2022-12-19T02:33:58.789Z",
+                    "total": 14
+                }
+            ],
+            "id": 62,
+            "name": "Guda42",
+            "coverImage": "https://samsungnubereats.s3.ap-northeast-2.amazonaws.com/1671071523779SAM_0810.JPG",
+            "category": {
+                "__typename": "Category",
+                "name": "japanese food"
+            },
+            "address": "Ginza",
+            "isPromoted": false
+        }
+    }
+}
+  
+
+*/
+
 /*#️⃣22.7 Restaurant Dashboar part one
   1. 컨셉: 메뉴를 업로드 + Pay
   #️⃣22.13 Victory Charts part One
@@ -34,16 +78,28 @@
     3. ⭐step1. Domain approval 도메인이 필요함 > step2. Verification check
     */
 
-import { gql, useQuery, useSubscription } from "@apollo/client";
-import React, { useEffect } from "react";
+import { gql, useApolloClient, useLazyQuery, useMutation, useQuery, useSubscription } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { Dish } from "../../components/dish";
 import { DISH_FRAGMENT, FULL_ORDER_FRAGMENT, ORDERS_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragment";
-import { MyRestaurantQuery, MyRestaurantQueryVariables, PendingOrdersSubscription, PendingOrdersSubscriptionVariables } from "../../__generated__/types";
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryPie, VictoryVoronoiContainer, VictoryLine, VictoryTheme, VictoryLabel, VictoryTooltip } from 'victory';
-import { TestMap } from "../../components/kakaoMap";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import {DeleteDishMutation, DeleteDishMutationVariables, MyRestaurantQuery, MyRestaurantQueryVariables, PendingOrdersSubscription } from "../../__generated__/types";
+import {  VictoryChart, VictoryAxis, VictoryVoronoiContainer, VictoryLine, VictoryTheme, VictoryLabel, VictoryTooltip } from 'victory';
+import styled from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
+
+const Wrapper = styled.div``;
+
+const DELETE_DISH = gql`
+  mutation deleteDish($input:DeleteDishInput!){
+    deleteDish(input:$input){
+      ok
+      error
+    }
+  }
+`;
 
 export const MY_RESTAURANT_QUERY = gql`
   query myRestaurant($input:MyRestaurantInput!){
@@ -66,6 +122,8 @@ export const MY_RESTAURANT_QUERY = gql`
   ${DISH_FRAGMENT}
   ${ORDERS_FRAGMENT}
 `
+
+
 const PENDING_ORDERS_SUBSCRIPTION = gql`
   subscription pendingOrders{
     pendingOrders{
@@ -80,17 +138,78 @@ interface IPrams {
   id: string;
 }
 
-//useQuery는 Myrestaurant이 렌더링 되면 바로 execute vs useMuatation에  mutation function을 호출 해줘야 한다
+
+
+
 export const Myrestaurant = () => {
+
+  const [deleteDish, { data:delData }] = useMutation<DeleteDishMutation, DeleteDishMutationVariables >(DELETE_DISH, {
+    refetchQueries:[{query:MY_RESTAURANT_QUERY}],
+    
+  })
   const { id } = useParams<IPrams>()
-  const {data} = useQuery<MyRestaurantQuery, MyRestaurantQueryVariables>(
+  const {data} = useQuery<MyRestaurantQuery>(
     MY_RESTAURANT_QUERY, {
       variables:{
         input:{
           id: +id 
         }
       }
+  })
+  
+  const client = useApolloClient()
+  useEffect(() => {
+    const queryResult = client.readQuery({query: MY_RESTAURANT_QUERY})
+    console.log(queryResult)
+  }, [])
+  /*1. deleteDish mutation에서  : dish entity(table)에 있는 id를 찾아서 삭제 해주면 된다
+      ⭐cache가 업데이트 되는 api + dish entity에 있는   
+        🔹updateQuery는 적합x: "cached data + upadate data"  
+        🔹refetchQueries: #️⃣22.5강의 3:18 ~ 참조
+          - 리렌더링 후는 정상적으로 되는데 리렌   
+        🔹useLazyQuery:    
+    */
+  const onDelete = (dishId:number) => {
+
+    deleteDish({
+      variables:{
+        input:{
+          dishId: +dishId
+        }
+      }
     })
+    const restaurantResult = client.readQuery({
+      query: MY_RESTAURANT_QUERY,
+    })
+
+    console.log(restaurantResult)
+    client.writeQuery({
+      query:MY_RESTAURANT_QUERY,
+      data:{
+          myRestaurant:{
+          ...restaurantResult.myRestaurant,
+            restaurant:{
+              "__typename": "Restaurant",
+              menu:[
+                {
+                  "__typename": "Dish",
+                  id: dishId,
+                  name: "",
+                  price: null,
+                  photo: null,
+                  description: "fuckingCrazy",
+                  options: []
+                },
+                ...restaurantResult.myRestaurant.restaurant.menu              
+              ],
+              ...restaurantResult.myRestaurant.restaurant
+            }
+          }      
+       } 
+    })
+
+  }
+  
   const {data: subscriptionData} = useSubscription<PendingOrdersSubscription>(
     PENDING_ORDERS_SUBSCRIPTION)
     
@@ -100,7 +219,9 @@ export const Myrestaurant = () => {
       if(subscriptionData?.pendingOrders.id){
         history.push(`/orders/${subscriptionData.pendingOrders.id}`);
       }
-    },[subscriptionData]) 
+    },[subscriptionData])
+
+    
   return (
     <div>
       <div className=" bg-gray-700 py-28 bg-center bg-cover"
@@ -116,6 +237,8 @@ export const Myrestaurant = () => {
          >
           Add Dish&rarr;
         </Link>
+        
+
         <Link to={``} className=" text-white bg-lime-700 py-3 px-10">
           Buy Promotion &rarr;
         </Link>
@@ -124,14 +247,19 @@ export const Myrestaurant = () => {
             <h4 className=" text-xl mb-5">Please upload a dish</h4>
           ) : (
             <div className=" grid md:grid-cols-3 gap-x-5 gap-y-10">
-              {data?.myRestaurant.restaurant?.menu.map((dish,index) => (
-                <Dish
-                  key={index} 
-                  description={dish.description} 
-                  id={dish.id} 
-                  name={dish.name} 
-                  price={dish.price}                  
-                />
+              {data?.myRestaurant.restaurant?.menu.map((dish, index) => (
+                <Wrapper key={index}>
+                  <button onClick={ () => onDelete( dish.id)}>
+                    <FontAwesomeIcon icon={faXmark} size="1x" color="red"/>   
+                  </button>
+                  <Dish
+                    key={index} 
+                    description={dish.description} 
+                    id={dish.id}
+                    name={dish.name} 
+                    price={dish.price}                  
+                  />
+                </Wrapper>  
               ))}
             </div>
           )}

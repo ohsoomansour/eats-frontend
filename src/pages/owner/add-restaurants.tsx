@@ -63,10 +63,50 @@
   2.📄DOCS: Apollo Client allows you to make local(+cashe) modifications to your GraphQL data by updating the cache
     🔹by updating the cache: ⚡refetchQueries작업
 
+  🔷const client = useApolloClient();
+        useEffect(() =>{
+          const queryResult = client.readQuery({query: MY_RESTAURANTS_QUERY})
+          console.log(queryResult) === ⭐Apollo Dev Tools의 CACHE와 일치하는지 확인
+        },[])          
+     
+        {
+          "myRestaurants": {
+              "__typename": "MyRestaurantsOutput",
+              "ok": true,
+              "error": null,
+          ✅ "restaurants": [
+                  {
+                      "__typename": "Restaurant",
+                      "id": 63,
+                      "name": "it'sRan",
+                      "coverImage": "https://samsungnubereats.s3.ap-northeast-2.amazonaws.com/1671071676833SAM_0780.JPG",
+                      "category": {
+                          "__typename": "Category",
+                          "name": "japanese food"
+                      },
+                      "address": "it'sRan",
+                      "isPromoted": false
+                  },
+                  {
+                      "__typename": "Restaurant",
+                      "id": 62,
+                      "name": "Guda42",
+                      "coverImage": "https://samsungnubereats.s3.ap-northeast-2.amazonaws.com/1671071523779SAM_0810.JPG",
+                      "category": {
+                          "__typename": "Category",
+                          "name": "japanese food"
+                      },
+                      "address": "Ginza",
+                      "isPromoted": false
+                  }
+              ]
+          }
+        }
+    ⭐(비교)refetchQueries는 server에 요청 즉 API를 사용하여 cash 업데이트
     
  */
 import { gql, useApolloClient, useMutation } from "@apollo/client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
@@ -98,6 +138,8 @@ export const AddRestaurant = () => {
   const [ImageUrl, setImageUrl] = useState("")
   const history = useHistory()
 
+  
+
   const onCompleted = (data: CreateRestaurantMutation) => {
     const {
       createRestaurant:{ ok, restaurantId }
@@ -110,6 +152,8 @@ export const AddRestaurant = () => {
         query: MY_RESTAURANTS_QUERY,
         
       })
+      
+      console.log(queryResult)
 
       client.writeQuery({
         query:MY_RESTAURANTS_QUERY,

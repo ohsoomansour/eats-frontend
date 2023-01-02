@@ -24,8 +24,6 @@ import React, { ReactNode } from "react";
 
 
 */
-
-
 interface IDishProps{
   description:string;
   id?:number;
@@ -42,10 +40,12 @@ interface IDishProps{
 }
 
 export const Dish:React.FC<IDishProps> = ({
+  //owner입장
   description,
   id = 0,
   name,
   price,
+  //customer입장
   isCustomer = false, 
   orderStarted = false,
   options,

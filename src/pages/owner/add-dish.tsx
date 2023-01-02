@@ -46,7 +46,6 @@ const CREATE_DISH_MUTATION = gql`
 
 interface IPrams {
   restaurantId: string;
-
 }
 interface IForm {
   name: string;

@@ -136,8 +136,6 @@ export const EditProfile = () => {
           placeholder="Address"
         />
 
-
-
         <Button loading={loading} canClick={formState.isValid} actionText="Save Profile"  />
 
       </form>

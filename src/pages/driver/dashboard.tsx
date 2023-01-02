@@ -94,12 +94,17 @@
     🔹TailwindCSS: hover 참고블로그 - 📄https://tailwind-elements.com/docs/standard/components/hover-effects/
     */
   
-import React, { useEffect, useState } from "react" 
-import GoogleMapReact from 'google-map-react'
+import React, { useEffect, useState } from "react";
+import GoogleMapReact from 'google-map-react';
 import { gql, useMutation, useSubscription } from "@apollo/client";
 import { FULL_ORDER_FRAGMENT } from "../../fragment";
 import { CookedOrdersSubscription, TakeOrderMutation, TakeOrderMutationVariables } from "../../__generated__/types";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components"
+
+const h1 = styled.h1`
+  
+`
 
 const COOKED_ORDER_SUBSCRIPTION = gql`
   subscription cookedOrders{
@@ -273,38 +278,37 @@ export const Dashboard = () => {
         </GoogleMapReact>
          
       </div>
-      <p className=" font-sans text-lg text-gray-600 from-neutral-100"> 🚨주의사항: 구글 지도의 한국 도로에서는 '환승모드' 이외의 '운전', '걷기', '자전거' 모드는 지원되지 않습니다.</p>
+      <p className=" font-sans text-lg text-gray-600 from-neutral-100"> 
+        🚨주의사항: 구글 지도의 한국 도로에서는 '환승모드' 이외의 '운전', '걷기', '자전거' 모드는 지원되지 않습니다.
+      </p>
 
       <KaKaoMapApp />
       <div className=" max-w-screen-sm  mx-auto bg-white relative -top-10 shadow-lg py-8 px-5">
-      {cookedOrdersData?.cookedOrders.restaurant ?(
-       <> 
-        <h1 className=" text-3xl text-center font-medium"> 
-          New Cooked Order
-        </h1>
-        <h1 className=" text-center text-2xl my-3 font-medium ">
-          Pick it up soon @{" "}
-          {cookedOrdersData?.cookedOrders.restaurant.name}
-        </h1>
-        <button
-          className=" btn w-full block text-center mt-5"
-          onClick={() => triggerMutation(cookedOrdersData.cookedOrders.id)}
-         >
-          Accept Challenge &rarr; 
-        </button>    
-       </>) : (
-          <h1 className=" text-center text-3xl font-medium">
-            No orders yet...
-          </h1>
-       ) 
+        {cookedOrdersData?.cookedOrders.restaurant ?(
+          <> 
+            <h1 className=" text-3xl text-center font-medium"> 
+              New Cooked Order
+            </h1>
+            <h1 className=" text-center text-2xl my-3 font-medium ">
+              Pick it up soon @{" "}
+              {cookedOrdersData?.cookedOrders.restaurant.name}
+            </h1>
+            <button
+              className=" btn w-full block text-center mt-5"
+              onClick={() => triggerMutation(cookedOrdersData.cookedOrders.id)}
+            >
+              Accept Challenge &rarr; 
+            </button>    
+          </>) : (
+              <h1 className=" text-center text-3xl font-medium">
+                No orders yet...
+              </h1>
+          ) 
        
-       }
+        }
       </div> 
 
-      
-      
     </div>
-    
     
   )
 }
