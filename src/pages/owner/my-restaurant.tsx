@@ -88,7 +88,45 @@ import {  VictoryChart, VictoryAxis, VictoryVoronoiContainer, VictoryLine, Victo
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+/* 🚧deleteDish UI완성🚧 - #️⃣22.5 Cache Optimazation part One
+  [해결방안1] useMutation hook의 옵션 ⭐update function
+  📄https://www.apollographql.com/docs/react/data/mutations/#the-update-function
+   - Any changes you make to cached data inside of an update function are automatically broadcast to queries 
+     that are listening for changes to that data. Consequently, your application's UI will update to reflect 
+     these updated cached values.
+  
+     
+  [해결방안2] 
+    const restaurantResult = client.readQuery({
+      query: MY_RESTAURANT_QUERY,
+    })
 
+    console.log(restaurantResult)
+    client.writeQuery({
+      query:MY_RESTAURANT_QUERY,
+      data:{
+          myRestaurant:{
+          ...restaurantResult.myRestaurant,
+            restaurant:{
+              "__typename": "Restaurant",
+              menu:[
+                {
+                  "__typename": "Dish",
+                  id: dishId,
+                  name: "",
+                  price: null,
+                  photo: null,
+                  description: "fuckingCrazy",
+                  options: []
+                },
+                ...restaurantResult.myRestaurant.restaurant.menu              
+              ],
+              ...restaurantResult.myRestaurant.restaurant
+            }
+          }      
+       } 
+    }) 
+  */
 
 const Wrapper = styled.div``;
 
@@ -143,10 +181,7 @@ interface IPrams {
 
 export const Myrestaurant = () => {
 
-  const [deleteDish, { data:delData }] = useMutation<DeleteDishMutation, DeleteDishMutationVariables >(DELETE_DISH, {
-    refetchQueries:[{query:MY_RESTAURANT_QUERY}],
-    
-  })
+  
   const { id } = useParams<IPrams>()
   const {data} = useQuery<MyRestaurantQuery>(
     MY_RESTAURANT_QUERY, {
@@ -169,8 +204,26 @@ export const Myrestaurant = () => {
           - 리렌더링 후는 정상적으로 되는데 리렌   
         🔹useLazyQuery:    
     */
-  const onDelete = (dishId:number) => {
+   
+  const [deleteDish] = useMutation<DeleteDishMutation, DeleteDishMutationVariables >(DELETE_DISH, {
+     update(cache, { data }) {
+       cache.modify({
+         fields:{
+           myRestaurant(existingMyRestaurant = []){
+            const newMyRestaurantRef = cache.writeFragment({
+              data:deleteDish,
+              fragment:DISH_FRAGMENT
+            })
+            return [...existingMyRestaurant, newMyRestaurantRef]
+           }
+         }
+       })
+     }
+     
+   })
 
+   const OnDelete = (dishId:number) => {
+    
     deleteDish({
       variables:{
         input:{
@@ -206,7 +259,7 @@ export const Myrestaurant = () => {
             }
           }      
        } 
-    })
+    }) 
 
   }
   
@@ -249,7 +302,10 @@ export const Myrestaurant = () => {
             <div className=" grid md:grid-cols-3 gap-x-5 gap-y-10">
               {data?.myRestaurant.restaurant?.menu.map((dish, index) => (
                 <Wrapper key={index}>
-                  <button onClick={ () => onDelete( dish.id)}>
+                  <button onClick={ () => {
+                    OnDelete( dish.id)
+                    
+                  }}>
                     <FontAwesomeIcon icon={faXmark} size="1x" color="red"/>   
                   </button>
                   <Dish
