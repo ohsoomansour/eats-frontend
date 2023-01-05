@@ -92,6 +92,8 @@
   
     
     🔹TailwindCSS: hover 참고블로그 - 📄https://tailwind-elements.com/docs/standard/components/hover-effects/
+    
+    45 Rockefeller Plaza, New York, NY 10111
     */
   
 import React, { useEffect, useState } from "react";
@@ -100,11 +102,7 @@ import { gql, useMutation, useSubscription } from "@apollo/client";
 import { FULL_ORDER_FRAGMENT } from "../../fragment";
 import { CookedOrdersSubscription, TakeOrderMutation, TakeOrderMutationVariables } from "../../__generated__/types";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components"
 
-const h1 = styled.h1`
-  
-`
 
 const COOKED_ORDER_SUBSCRIPTION = gql`
   subscription cookedOrders{
@@ -158,7 +156,7 @@ const KaKaoMapApp = () => {
 export const Dashboard = () => {
 
   const {data:cookedOrdersData} = useSubscription<CookedOrdersSubscription>(COOKED_ORDER_SUBSCRIPTION)
-  
+  console.log(cookedOrdersData)
   const history = useHistory()
   const onCompleted = (data: TakeOrderMutation) => {
     if(data.takeOrder.ok){
@@ -214,7 +212,7 @@ export const Dashboard = () => {
       geocoder.geocode({
         location: new google.maps.LatLng(driveCoords.lat, driveCoords.lng)
       },(results, status) => {
-        console.log(results, status)
+        //console.log(results, status)
       })
     }
   },[driveCoords?.lat, driveCoords?.lng])
@@ -237,11 +235,12 @@ export const Dashboard = () => {
 
         }
       })
+      
       directionsRenderer.setMap(map)
       directionsService.route({
         origin:{
           //location:  new google.maps.LatLng(driveCoords.lat, driveCoords.lng)
-          query: cookedOrdersData?.cookedOrders.restaurant.address
+          query: cookedOrdersData?.cookedOrders.restaurant.address,
         },
         destination:{
           query: cookedOrdersData?.cookedOrders.customer?.address

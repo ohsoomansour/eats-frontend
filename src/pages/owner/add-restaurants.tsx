@@ -133,13 +133,13 @@ interface IFormProps {
 }
 
 export const AddRestaurant = () => {
-  
   const client = useApolloClient()
+  
   const [ImageUrl, setImageUrl] = useState("")
   const history = useHistory()
-
   
-
+  
+  
   const onCompleted = (data: CreateRestaurantMutation) => {
     const {
       createRestaurant:{ ok, restaurantId }

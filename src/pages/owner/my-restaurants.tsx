@@ -92,24 +92,24 @@
   4. Cache와 직접적으로 상호작용하는 방법:(API를 건드리지 않고!) Restaurant 생성 그 자체를 fake 
       
   */ 
-  import { gql,  useApolloClient,  useQuery } from "@apollo/client";
-  import { Helmet } from "react-helmet";
-  import { Link } from "react-router-dom";
-  import { RESTAURANT_FRAGMENT } from "../../fragment";
-  import { MyRestaurantsQuery } from "../../__generated__/types";
-  import { Restaurant } from "../../components/restaurant";
-  import styled from "styled-components";
+import { gql,  useApolloClient,  useQuery } from "@apollo/client";
+import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
+import { RESTAURANT_FRAGMENT } from "../../fragment";
+import { MyRestaurantsQuery } from "../../__generated__/types";
+import { Restaurant } from "../../components/restaurant";
+import styled from "styled-components";
 import { useEffect } from "react";
 
-  const H = styled.h2`
-    color:black;
-    font-size:40px;
-    font-weight:20px;
-    font-family:'Covered By Your Grace', cursive;
-    margin-bottom:20px;
-    background-color:white;
-        
-  `;
+const H = styled.h2`
+  color:black;
+  font-size:40px;
+  font-weight:20px;
+  font-family:'Covered By Your Grace', cursive;
+  margin-bottom:20px;
+  background-color:white;
+      
+`;
 
 export const MY_RESTAURANTS_QUERY = gql`
   query MyRestaurants{
@@ -147,6 +147,9 @@ export const MyRestaurants = () => {
       <H className=" text-3xl font-medium mb-10 bg-white shadow-lg ">
         My Restaurants
       </H>
+      
+ 
+      
       {data?.myRestaurants.ok &&
        data.myRestaurants.restaurants.length === 0 ? (
           <>
@@ -159,9 +162,10 @@ export const MyRestaurants = () => {
             </Link>
           </>  
         ) : (
+        <>  
           <div className="grid md:grid-cols-3 gap-x-5 gap-y-10">
             {data?.myRestaurants.restaurants.map((restaurant) => (
-              <Restaurant
+              <Restaurant  
                 key={restaurant.id}
                 id={restaurant.id}
                 coverImg={restaurant.coverImage} 
@@ -169,6 +173,18 @@ export const MyRestaurants = () => {
               />
             ))}
           </div>
+          <Link to={`/add-restaurant`} className=" inline-block ">
+            <svg 
+              className="  transform h-64 w-80 hover:scale-110 transition duration-500 cursor-pointer" 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="390px" 
+              height="200px"  
+              viewBox="-430 -400 1200 1200"
+            >
+              <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+            </svg>
+          </Link>
+        </>  
         )}
      </div>
 

@@ -78,16 +78,17 @@
     3. ⭐step1. Domain approval 도메인이 필요함 > step2. Verification check
     */
 
-import { gql, useApolloClient, useLazyQuery, useMutation, useQuery, useSubscription } from "@apollo/client";
+import { ApolloClient, gql, InMemoryCache, useApolloClient,  useMutation, useQuery, useSubscription } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { Dish } from "../../components/dish";
 import { DISH_FRAGMENT, FULL_ORDER_FRAGMENT, ORDERS_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragment";
-import {DeleteDishMutation, DeleteDishMutationVariables, MyRestaurantQuery, MyRestaurantQueryVariables, PendingOrdersSubscription } from "../../__generated__/types";
+import {DeleteDishMutation, DeleteDishMutationVariables, MyRestaurantQuery, PendingOrdersSubscription } from "../../__generated__/types";
 import {  VictoryChart, VictoryAxis, VictoryVoronoiContainer, VictoryLine, VictoryTheme, VictoryLabel, VictoryTooltip } from 'victory';
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 /* 🚧deleteDish UI완성🚧 - #️⃣22.5 Cache Optimazation part One
   [해결방안1] useMutation hook의 옵션 ⭐update function
   📄https://www.apollographql.com/docs/react/data/mutations/#the-update-function
@@ -125,10 +126,40 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
             }
           }      
        } 
-    }) 
-  */
+    })
 
-const Wrapper = styled.div``;
+    [해결방안3.]
+    const [deleteDish] = useMutation<DeleteDishMutation, DeleteDishMutationVariables >(DELETE_DISH, {
+     update(cache, { data }) {
+       cache.modify({
+         fields:{
+           myRestaurant(existingMyRestaurant = []){
+            const newMyRestaurantRef = cache.writeFragment({
+              data:deleteDish,
+              fragment:DISH_FRAGMENT
+            })
+            return [...existingMyRestaurant, newMyRestaurantRef]
+           }
+         }
+       })
+     }
+     
+   })
+
+   [해결방안4.]
+   📄https://www.apollographql.com/docs/react/caching/garbage-collection/#cacheevict
+    Garbage collection and cache eviction
+
+
+  */
+/*HTML & CSS
+📄https://www.w3schools.com/html/html_blocks.asp
+
+*/
+const Wrapper = styled.div`
+
+
+`;
 
 const DELETE_DISH = gql`
   mutation deleteDish($input:DeleteDishInput!){
@@ -206,61 +237,23 @@ export const Myrestaurant = () => {
     */
    
   const [deleteDish] = useMutation<DeleteDishMutation, DeleteDishMutationVariables >(DELETE_DISH, {
-     update(cache, { data }) {
-       cache.modify({
-         fields:{
-           myRestaurant(existingMyRestaurant = []){
-            const newMyRestaurantRef = cache.writeFragment({
-              data:deleteDish,
-              fragment:DISH_FRAGMENT
-            })
-            return [...existingMyRestaurant, newMyRestaurantRef]
-           }
-         }
-       })
-     }
-     
-   })
+    refetchQueries:[{query:MY_RESTAURANT_QUERY}]
+  })
 
-   const OnDelete = (dishId:number) => {
+const cache = new InMemoryCache()
+
+  const onDelete = (dishId:number) => {
     
-    deleteDish({
+    /* deleteDish({
       variables:{
         input:{
           dishId: +dishId
         }
       }
-    })
-    const restaurantResult = client.readQuery({
-      query: MY_RESTAURANT_QUERY,
-    })
-
-    console.log(restaurantResult)
-    client.writeQuery({
-      query:MY_RESTAURANT_QUERY,
-      data:{
-          myRestaurant:{
-          ...restaurantResult.myRestaurant,
-            restaurant:{
-              "__typename": "Restaurant",
-              menu:[
-                {
-                  "__typename": "Dish",
-                  id: dishId,
-                  name: "",
-                  price: null,
-                  photo: null,
-                  description: "fuckingCrazy",
-                  options: []
-                },
-                ...restaurantResult.myRestaurant.restaurant.menu              
-              ],
-              ...restaurantResult.myRestaurant.restaurant
-            }
-          }      
-       } 
-    }) 
-
+    }) */
+    
+    cache.evict({id: `Dish:${dishId}`})
+    //history.go(0)
   }
   
   const {data: subscriptionData} = useSubscription<PendingOrdersSubscription>(
@@ -299,17 +292,17 @@ export const Myrestaurant = () => {
           {data?.myRestaurant.restaurant?.menu.length === 0 ? (
             <h4 className=" text-xl mb-5">Please upload a dish</h4>
           ) : (
-            <div className=" grid md:grid-cols-3 gap-x-5 gap-y-10">
+            <div className=" grid md:grid-cols-5 gap-x-5 gap-y-10">
               {data?.myRestaurant.restaurant?.menu.map((dish, index) => (
-                <Wrapper key={index}>
+                <Wrapper key={index} >
                   <button onClick={ () => {
-                    OnDelete( dish.id)
+                    onDelete(dish.id)
                     
                   }}>
-                    <FontAwesomeIcon icon={faXmark} size="1x" color="red"/>   
+                    <FontAwesomeIcon icon={faXmark} size="1x" color="red" className="highlight" border />
                   </button>
                   <Dish
-                    key={index} 
+                    
                     description={dish.description} 
                     id={dish.id}
                     name={dish.name} 

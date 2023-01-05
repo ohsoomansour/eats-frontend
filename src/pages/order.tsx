@@ -196,7 +196,8 @@ export const Order = () => {
           )}
           {data?.getOrder.order?.status === OrderStatus.Delivered && (
             <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
-              Thank you for using Nuber Eats
+              <p>Thank you for using Hey Delivery 😍 </p>
+              <p className=" text-sm mt-4">저기요 배달요를 이용 해주셔서 대단히 감사합니다!</p> 
             </span>
           )}          
         </div>

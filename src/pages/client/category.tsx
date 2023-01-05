@@ -1,5 +1,4 @@
 import { gql, useQuery } from "@apollo/client";
-import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragment";
 import { CategoryQuery, CategoryQueryVariables } from "../../__generated__/types";

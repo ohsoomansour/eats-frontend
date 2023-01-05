@@ -6,10 +6,6 @@ import { DishOption } from "../../components/dish.option"
 import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragment"
 import { CreateOrderItemInput, CreateOrderMutation, CreateOrderMutationVariables, RestaurantQuery, RestaurantQueryVariables } from "../../__generated__/types"
 
-/*#️⃣ParentComponent > childComponent
-
-*/
-
 const RESTAURANT_QUERY = gql`
   query restaurant($input:RestaurantInput!){
     restaurant(input:$input){
