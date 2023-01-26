@@ -149,7 +149,11 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
    [해결방안4.]
    📄https://www.apollographql.com/docs/react/caching/garbage-collection/#cacheevict
     Garbage collection and cache eviction
-
+    + nico 피드백: you should not const cache = new InmemoryCache()
+      That completely creates a new cache, where there is no data, you need to use the cache that your app is using
+    
+    ✅const client = useApolloClient();
+      client.cache.evitc(...)
 
   */
 /*HTML & CSS
@@ -211,7 +215,6 @@ interface IPrams {
 
 
 export const Myrestaurant = () => {
-
   
   const { id } = useParams<IPrams>()
   const {data} = useQuery<MyRestaurantQuery>(
@@ -226,7 +229,7 @@ export const Myrestaurant = () => {
   const client = useApolloClient()
   useEffect(() => {
     const queryResult = client.readQuery({query: MY_RESTAURANT_QUERY})
-    console.log(queryResult)
+    //console.log(queryResult)
   }, [])
   /*1. deleteDish mutation에서  : dish entity(table)에 있는 id를 찾아서 삭제 해주면 된다
       ⭐cache가 업데이트 되는 api + dish entity에 있는   
@@ -240,19 +243,19 @@ export const Myrestaurant = () => {
     refetchQueries:[{query:MY_RESTAURANT_QUERY}]
   })
 
-const cache = new InMemoryCache()
+
 
   const onDelete = (dishId:number) => {
     
-    /* deleteDish({
+    deleteDish({
       variables:{
         input:{
           dishId: +dishId
         }
       }
-    }) */
+    })
     
-    cache.evict({id: `Dish:${dishId}`})
+    client.cache.evict({id: `Dish:${dishId}`})
     //history.go(0)
   }
   

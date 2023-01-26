@@ -90,7 +90,8 @@ export const Category = () => {
       variables:{
         input:{
           page:1,
-          slug: params.slug
+          slug: params.slug,
+          
         }
       }
     })

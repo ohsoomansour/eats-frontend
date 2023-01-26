@@ -3,7 +3,7 @@
   1. 백엔드 포트 4000 / 프론트 엔드 포트 3000
     > 백엔드 npm run start:dev
   2. 🚧Apollo Client Developer Tools 설치  
-    🔴스키마가 안보임
+    🔴스키마가 안보임 
 */
 /*#️⃣15.0 Local Only Field
     1.의미: Your Apollo Client queries can include local-only fields 

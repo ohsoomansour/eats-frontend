@@ -6,7 +6,7 @@ import { RestaurantsPageQuery, RestaurantsPageQueryVariables } from "../__genera
 
 
 export const Categorys = () => {
-  const {data, loading} = useQuery<
+  const {data} = useQuery<
   RestaurantsPageQuery, RestaurantsPageQueryVariables
   >(RESTAURANTS_QUERY, {
     variables:{

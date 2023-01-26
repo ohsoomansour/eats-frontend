@@ -46,11 +46,13 @@
   *LF:줄을 바꾸려는 동작 
   *CRLF:줄 바꿈
   > 💊해결 한 방: git config --global core.autocrlf true
-
-  🔥github.com/search?q=user%3Asoo-sin   
+    🔥github.com/search?q=user%3Asoo-sin
+  2. On branch main nothing to commit, working tree clean
+    > 특정 폴더0 (A)를 add한 것이 아니라  (B)에가서 수정했다 
+     
  
  #️⃣26.3 Netlify - 
-  1. github id:ceoosm@naver.com / pw: (나)수르@34
+  1. github id:ceoosm@naver.com / pw: (나)sour@34
   2. https://app.netlify.com/start/
     > Connect to Git provider
     > Pick a repository Github repository: eats-frontend
