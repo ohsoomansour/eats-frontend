@@ -112,6 +112,7 @@ export const Restaurant = () => {
       }
     }
   }
+  
   const removeOptionFromItem = (dishId: number, optionName:string) => {
     if(!isSelected(dishId)){
       return;
@@ -122,11 +123,11 @@ export const Restaurant = () => {
     }
     setOrderItems((current) => [
       {
-      dishId,
-       options:oldItem?.options?.filter(
+        dishId,
+        options:oldItem?.options?.filter(
         (option) => option.name !== optionName
-       ),
-      ...current,
+        ),
+        ...current,
       }
     ])
   }

@@ -68,7 +68,6 @@ const onClick = () => {
 
   return (
     <div 
-      
       className={` px-8 py-4 border cursor-pointer transition-all ${
         isSelected ? "border-gray-800" : " hover:border-gray-800"
       }`}
@@ -92,7 +91,7 @@ const onClick = () => {
       {isCustomer && options && options.length !== 0 && (
         <div>
           <h5 className="mt-8 mb-3 font-bold">Dish Options:</h5>
-          {dishOptions}
+          <div className=" grid gap-2 justify-start">{dishOptions} </div>
         </div>
       )}
     </div>

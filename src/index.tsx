@@ -77,7 +77,7 @@ const root = ReactDOM.createRoot(
 root.render(
 
     <ApolloProvider client={client}>
-      <GlobalStyle />
+      
       <App />
     </ApolloProvider>
 

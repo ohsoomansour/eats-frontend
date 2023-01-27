@@ -4,9 +4,9 @@
    🚨 같은 크롬으로 진행해도 불편함이 있는지 Y/N 
 
 2. 3가지 다른 인터넷 창을 띄우고 아래의 아이디와 비밀번호를 입력하고 로그인 합니다.   
-   고객 아이디:customer@naver.com  비번:123456 
-   사업장 주인:owner@naver.com     비번:123456
-   배달 기사: delivery@naver.com  비번:123456
+   고객 아이디:customer@naver.com  비번:284823 
+   사업장 주인:owner@naver.com     비번:284823
+   배달 기사: delivery@naver.com  비번:284823
 
 3. 고객 아이디로 식당 ''음식점을 클릭하고 들어가서 메뉴를 선택한 후 주문을 합니다.
    💠start Order를 클릭 > Add > Confirm Order >  Your are about to place an order이라고 창이 뜹니다. > 확인

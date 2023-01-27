@@ -19,9 +19,9 @@ export const Categorys = () => {
   return (
     <div className=" flex justify-around max-w-s cursor-pointer">
       
-      {data?.allCategories.categories?.map((category) => (
+      {data?.allCategories.categories?.map((category, index) => (
         <Link to={`/category/${category.slug}`}>
-          <div className=" flex flex-col group items-center cursor-pointer ">
+          <div  className=" flex flex-col group items-center cursor-pointer ">
             <div
               key={category.id}
               className=" w-16 h-16 rounded-full group-hover:bg-gray-100 bg-cover"
