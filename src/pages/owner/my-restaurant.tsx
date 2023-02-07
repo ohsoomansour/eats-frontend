@@ -78,8 +78,8 @@
     3. ⭐step1. Domain approval 도메인이 필요함 > step2. Verification check
     */
 
-import { ApolloClient, gql, InMemoryCache, useApolloClient,  useMutation, useQuery, useSubscription } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import { gql, useApolloClient,  useMutation, useQuery, useSubscription } from "@apollo/client";
+import React, { useEffect} from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { Dish } from "../../components/dish";
 import { DISH_FRAGMENT, FULL_ORDER_FRAGMENT, ORDERS_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragment";
@@ -88,6 +88,7 @@ import {  VictoryChart, VictoryAxis, VictoryVoronoiContainer, VictoryLine, Victo
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { OwnerDishOptions } from "../../components/owner.dishOption";
 
 /* 🚧deleteDish UI완성🚧 - #️⃣22.5 Cache Optimazation part One
   [해결방안1] useMutation hook의 옵션 ⭐update function
@@ -305,12 +306,20 @@ export const Myrestaurant = () => {
                     <FontAwesomeIcon icon={faXmark} size="1x" color="red" className="highlight" border />
                   </button>
                   <Dish
-                    
-                    description={dish.description} 
+                    description={dish.description}
+                    dishOptionss={dish.options || undefined || null}
                     id={dish.id}
                     name={dish.name} 
                     price={dish.price}                  
-                  />
+                  >
+                    {dish.options?.map((option, index) => (
+                      <OwnerDishOptions
+                        key={index}
+                        name={option.name}
+                        extra={option.extra}
+                      />
+                    ))}
+                  </Dish>
                 </Wrapper>  
               ))}
             </div>

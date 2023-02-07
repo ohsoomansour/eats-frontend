@@ -80,7 +80,7 @@ export const Order = () => {
       }
     }
   })
-
+  console.log(data)
   useEffect(() => {
     if(data?.getOrder.ok){
       subscribeToMore({
@@ -170,7 +170,7 @@ export const Order = () => {
                   <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
                     Status: {data?.getOrder.order?.status}
                   </span>
-                )}
+              )}
               
             </>
           )}

@@ -1,5 +1,10 @@
-import { ChildProps } from "postcss";
+import { useQuery } from "@apollo/client";
 import React, { ReactNode } from "react";
+import { useMe } from "../hooks/useMe";
+import { MY_RESTAURANT_QUERY } from "../pages/owner/my-restaurant";
+import { MyRestaurantQuery, UserRole } from "../__generated__/types";
+import { DishOption } from "./dish.option";
+import { OwnerDishOptions } from "./owner.dishOption";
 
 /*#️⃣24.0 Extending the Dish Component
   1. null과 undefined의 차이
@@ -25,6 +30,7 @@ import React, { ReactNode } from "react";
 
 */
 interface IDishProps{
+  dishOptionss:object[] | undefined | null;
   description:string;
   id?:number;
   name:string;
@@ -41,10 +47,12 @@ interface IDishProps{
 
 export const Dish:React.FC<IDishProps> = ({
   //owner입장
+  dishOptionss,
   description,
   id = 0,
   name,
   price,
+  children:ownerDishoptons,
   //customer입장
   isCustomer = false, 
   orderStarted = false,
@@ -53,8 +61,9 @@ export const Dish:React.FC<IDishProps> = ({
   isSelected,
   removeFromOrder,
   children: dishOptions ,
+   
 }) => {
-
+const {data: userData} = useMe()
 const onClick = () => {
   if(orderStarted){
     if(!isSelected && addItemToOrder){
@@ -65,7 +74,14 @@ const onClick = () => {
     }
   }
 }
-
+const {data} = useQuery<MyRestaurantQuery>(
+  MY_RESTAURANT_QUERY, {
+    variables:{
+      input:{
+        id: +id 
+      }
+    }
+})
   return (
     <div 
       className={` px-8 py-4 border cursor-pointer transition-all ${
@@ -73,8 +89,8 @@ const onClick = () => {
       }`}
     >
       <div className=" mb-5">
-        <h3 className=" text-lg font-medium flex items-center">
-          {name} {" "} 
+        <h3 className=" text-lg font-medium font-bold flex items-center">
+          {name} ${price}
           {orderStarted && (
             <button
               className={`ml-3 py-1 focus:outline-none text-sm text-white ${
@@ -85,9 +101,18 @@ const onClick = () => {
             </button>
           )}          
         </h3>
-        <h4 className=" font-medium">{description}</h4>
+        <h4 className=" font-medium">🔥{description}</h4>
       </div>
-      <span>${price}</span>
+      
+      <div>
+        {userData?.me.role === UserRole.Owner && (
+        <>  
+          <h5 className="mt-8 mb-3 font-bold">Dish Options:</h5>  
+          <div>{ownerDishoptons}</div>
+        </>
+        )}
+      </div>
+      
       {isCustomer && options && options.length !== 0 && (
         <div>
           <h5 className="mt-8 mb-3 font-bold">Dish Options:</h5>

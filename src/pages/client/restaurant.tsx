@@ -162,7 +162,7 @@ export const Restaurant = () => {
     }
     
     const ok = window.confirm("You are about to place an order")
-    if(ok ){
+    if(ok){
       createOrderMutation({
         variables:{
           input:{
@@ -210,18 +210,18 @@ export const Restaurant = () => {
         <div className="w-full grid md:grid-cols-3 gap-x-5 gap-y-10">
           {data?.restaurant.restaurant?.menu.map((dish,index) => (
             <Dish
+              
               id={dish.id}
-              isSelected={isSelected(dish.id)} 
+              isSelected={isSelected(dish.id)}
               orderStarted={orderStarted}
-              key={index} 
-              description={dish.description} 
-              name={dish.name} 
+              key={index}
+              description={dish.description}
+              name={dish.name}
               price={dish.price}
-              isCustomer={true} 
+              isCustomer={true}
               options={dish.options || "" || undefined}
               addItemToOrder={addItemToOrder}
-              removeFromOrder={removeFromOrder}
-                               
+              removeFromOrder={removeFromOrder} dishOptionss={[]}                               
             >
             {dish.options?.map((option, index) => (
               <DishOption
